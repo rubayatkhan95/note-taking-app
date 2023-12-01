@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, FlatList, RefreshControl, Text, Button, TouchableOpacity, TextInput, ToastAndroid, Alert } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 
 export default class NotesAddNew extends Component {
@@ -35,6 +36,9 @@ export default class NotesAddNew extends Component {
                 content: content
             }
             global.noteList.push(item)
+            setTimeout(() => {
+                Actions.NoteList()
+            }, 500);
             console.warn(global.noteList)
         } else {
             if (title.length == 0 && content.length == 0) {

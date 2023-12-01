@@ -34,13 +34,13 @@ export default class NoteList extends Component {
     }
 
     onPressAddButton = () => {
-        Actions.NoteAddNew()
-        let item = {
-            title: "new",
-            content: "new"
-        }
-        this.state.noteList.push(item)
-        this.setState({ refresh: true })
+        Actions.NotesAddNew()
+        // let item = {
+        //     title: "new",
+        //     content: "new"
+        // }
+        // this.state.noteList.push(item)
+        // this.setState({ refresh: true })
 
     }
 
@@ -84,7 +84,7 @@ export default class NoteList extends Component {
         return (
             <View style={{ backgroundColor: "white", marginTop: 3 }}>
                 <FlatList
-                    data={this.state.noteList}
+                    data={global.noteList}
                     renderItem={this.renderItem}
                     ListHeaderComponent={this.renderListHeader}
                     ListHeaderComponentStyle={{ margin: 10 }}

@@ -16,16 +16,16 @@ export default class Routing extends Component {
 
 
     componentDidMount() {
-        Actions.drawerClose();
-        BackPressed = DeviceEventEmitter.addListener('BackPressed', function (event) {
-            //this.handleBackButtonClick()
-        }.bind(this));
+       // Actions.drawerClose();
+        // BackPressed = DeviceEventEmitter.addListener('BackPressed', function (event) {
+        //     //this.handleBackButtonClick()
+        // }.bind(this));
     }
 
     componentWillUnmount() {
-        if (typeof BackPressed !== "undifined") {
-            BackPressed.remove();
-        }
+        // if (typeof BackPressed !== "undifined") {
+        //     BackPressed.remove();
+        // }
     }
 
 
