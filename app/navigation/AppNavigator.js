@@ -1,0 +1,204 @@
+import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import React from 'react';
+import { Image, Button } from 'react-native';
+import Dashboard from '../views/dashboard/Dashboard';
+import Login from '../views/authentication/Login';
+import ToDoList from '../views/todo/ToDoList';
+import {
+    createDrawerNavigator, DrawerContentScrollView,
+    DrawerItem,
+    DrawerItemList,
+} from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import UserProfile from '../views/user/UserProfile';
+import SettingsPage from '../views/settings/SettingsPage';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Icon from 'react-native-ico-material-design';
+import AddNewToDo from '../views/todo/AddNewToDo';
+
+const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator()
+const BottomTab = createBottomTabNavigator()
+
+
+const BottomTabFunction = () => {
+    return (
+        <BottomTab.Navigator>
+            <BottomTab.Screen
+                name='Login'
+                component={Login}
+                options={{
+                    headerShown: false, tabBarLabel: 'Login',
+                    tabBarIcon: ({ color, size }) => (
+                        <Icon name="list-of-three-elements-on-black-background" color={color} size={size} />
+                    ),
+                }} />
+            <BottomTab.Screen
+                name="Profile"
+                component={UserProfile}
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => (
+                        <Icon name="round-account-button-with-user-inside" color={color} size={size} />
+                    ),
+                }} />
+            <BottomTab.Screen
+                name="Settings"
+                component={SettingsPage}
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => (
+                        <Icon name="settings-cogwheel-button" color={color} size={size} />
+                    )
+                }} />
+        </BottomTab.Navigator>
+
+    )
+}
+
+
+function getHeaderTitle(route) {
+    // If the focused route is not found, we need to assume it's the initial screen
+    // This can happen during if there hasn't been any navigation inside the screen
+    // In our case, it's "Feed" as that's the first screen inside the navigator
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+    switch (routeName) {
+        case 'BottomTabFunction':
+            return 'Home';
+        case 'Profile':
+            return 'My profile';
+        case 'Login':
+            return 'My Login';
+        case 'Home':
+            return 'Home';
+    }
+}
+
+const LogoTitle = () => {
+    return (
+        <Image
+            style={{ width: 50, height: 50 }}
+            source={{
+                uri: 'https://n.trucklagbe.com/TruckLagbeUserImages/127892/127890/UserPhoto.jpg',
+            }}
+        />
+    )
+}
+
+const DrawerFunction = () => {
+    return (
+        <Drawer.Navigator
+            initialRouteName="BottomTabFunction"
+            drawerContent={(props) => <CustomDrawerContent {...props} />}
+            screenOptions={{
+                drawerStyle: {
+                    shadowColor: "pink",
+                    width: 240,
+                },
+
+            }}>
+            <Drawer.Screen name='To Do List' component={StackFunction} ></Drawer.Screen>
+            <Drawer.Screen name='Home' component={BottomTabFunction}
+                options={({ route }) => ({
+                    headerTitle: getHeaderTitle(route),
+                })} />
+                <Drawer.Screen
+                name='AddNewToDo'
+                component={AddNewToDo}
+                //options={({ route }) => ({ title: route.params.title })}
+            />
+
+
+
+        </Drawer.Navigator>
+    )
+}
+
+function CustomDrawerContent(props) {
+    return (
+        <DrawerContentScrollView {...props}>
+            <DrawerItem
+                label="Help"
+                //focused={true}
+                inactiveTintColor={"red"}
+                activeBackgroundColor={"blue"}
+                inactiveBackgroundColor={"grey"}
+                //onPress={() => alert('Link to help')}
+                activeTintColor={"pink"}
+            />
+            <DrawerItemList {...props} />
+        </DrawerContentScrollView>
+    );
+}
+
+
+const StackFunction = () => {
+    return (
+        <Stack.Navigator initialRouteName='Dashboard'
+            // sharing common styling in all the screens
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#2342DA',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}
+        >
+            {/* <Stack.Screen
+                name='Dashboard'
+                component={Dashboard}
+                options={{
+                    title: 'Overview',
+                    //sharing individuals styling
+                    headerStyle: { backgroundColor: "#2342DA" },
+
+                    headerTitle: (props) => <LogoTitle {...props} />,
+                    headerRight: () => (
+                        <Button
+                            onPress={() => alert('This is a button!')}
+                            title="Info"
+                            color="black"
+                        />
+                    ),
+                    // headerSearchBarOptions : true,
+                    headerLeft: () => (
+                        <Button
+                            onPress={() => alert('This is a button!')}
+                            title="Info"
+                            color="black"
+                        />
+                    ),
+
+                }}
+            /> */}
+            <Stack.Screen
+                name='To Do List'
+                component={ToDoList}
+                options={({ route }) => ({ title: route.params.title , headerShown: false})}
+            />
+
+            <Stack.Screen
+                name='Login'
+                component={Login}
+                initialParams={{ itemId: 42 }}
+
+                options={({ route }) => ({ title: route.params.title })}
+            />
+        </Stack.Navigator>
+    )
+}
+
+const AppNavigator = ({ appTheme }) => {
+    return (
+        <SafeAreaProvider>
+            <NavigationContainer theme={appTheme}>
+                <DrawerFunction />
+            </NavigationContainer>
+        </SafeAreaProvider>
+    )
+}
+
+export default AppNavigator;
